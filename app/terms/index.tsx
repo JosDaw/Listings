@@ -1,5 +1,6 @@
 import { ScrollView, StyleSheet, View } from "react-native"
 
+// TODO: fix this
 export default function Terms() {
 	return (
 		<ScrollView
@@ -15,7 +16,7 @@ export default function Terms() {
 
 const styles = StyleSheet.create({
 	background: {
-		backgroundColor: "#5271FF",
+		backgroundColor: "#BEDBBE",
 		flex: 1,
 	},
 	scrollContainer: {
@@ -32,6 +33,6 @@ const styles = StyleSheet.create({
 		padding: 16,
 		borderRadius: 8,
 		borderWidth: 5,
-		borderColor: "#FFBD59",
+		borderColor: "#EBA743",
 	},
 })

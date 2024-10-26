@@ -21,7 +21,7 @@ export default function Signup() {
 
 const styles = StyleSheet.create({
 	background: {
-		backgroundColor: "#5271FF",
+		backgroundColor: "#BEDBBE",
 		flex: 1,
 	},
 	scrollContainer: {
@@ -38,6 +38,6 @@ const styles = StyleSheet.create({
 		padding: 16,
 		borderRadius: 8,
 		borderWidth: 5,
-		borderColor: "#FFBD59",
+		borderColor: "#EBA743",
 	},
 })

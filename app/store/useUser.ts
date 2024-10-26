@@ -1,6 +1,7 @@
 import { deleteItemAsync, getItemAsync, setItemAsync } from "expo-secure-store"
 import { create } from "zustand"
 import { persist, PersistStorage } from "zustand/middleware"
+import { IUser } from "../types"
 
 // Define the state structure
 interface UserState {
@@ -19,10 +20,9 @@ interface UserActions {
 type UserStore = UserState & UserActions
 
 const initialUser: IUser = {
-	name: "",
 	email: "",
+	name: "",
 	userID: "",
-	phoneNumber: "",
 	expoPushToken: "",
 	allowPushNotifications: true,
 	isRealtor: false,

@@ -1,3 +1,4 @@
+import { useColorScheme } from "@/hooks/useColorScheme"
 import { Exo2_400Regular } from "@expo-google-fonts/exo-2"
 import {
 	DarkTheme,
@@ -7,11 +8,12 @@ import {
 import * as Font from "expo-font"
 import { Stack } from "expo-router"
 import * as SplashScreen from "expo-splash-screen"
+import { StatusBar } from "expo-status-bar"
 import { useCallback, useEffect, useState } from "react"
-import "react-native-reanimated"
-
-import { useColorScheme } from "@/hooks/useColorScheme"
 import { View } from "react-native"
+import "react-native-reanimated"
+import { RootSiblingParent } from 'react-native-root-siblings'
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
 import AuthScreen from "./auth"
 import useUser from "./store/useUser"
 
@@ -56,14 +58,27 @@ export default function RootLayout() {
 	}
 
 	return (
-		<ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-			<View onLayout={onLayoutRootView} style={{ flex: 1 }}>
-				<Stack>
-					<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-					<Stack.Screen name="+not-found" />
-					<Stack.Screen name="auth" />
-				</Stack>
-			</View>
-		</ThemeProvider>
+		<RootSiblingParent>
+			<SafeAreaProvider>
+				<ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+					<View onLayout={onLayoutRootView} style={{ flex: 1 }}>
+						<SafeAreaView
+							style={{
+								flex: 1,
+								backgroundColor: '#B9D9C3'
+							}}
+							edges={["right", "top", "left"]}
+						>
+							<StatusBar style="light" />
+							<Stack>
+								<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+								<Stack.Screen name="+not-found" />
+								<Stack.Screen name="auth" />
+							</Stack>
+						</SafeAreaView>
+					</View>
+				</ThemeProvider>
+			</SafeAreaProvider>
+		</RootSiblingParent>
 	)
 }

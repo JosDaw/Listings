@@ -22,7 +22,7 @@ export default function Checkbox({
 			<View
 				style={[
 					styles.checkbox,
-					{ backgroundColor: checked ? "#5271FF" : "#FFF" }, // Inline style for background color
+					{ backgroundColor: checked ? "#BEDBBE" : "#FFF" }, // Inline style for background color
 				]}
 			>
 				{checked && <Ionicons name="checkmark" size={16} color="#FFF" />}
@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
 		height: 24,
 		borderRadius: 5,
 		borderWidth: 2,
-		borderColor: "#5271FF",
+		borderColor: "#BEDBBE",
 		alignItems: "center",
 		justifyContent: "center",
 	},

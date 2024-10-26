@@ -4,6 +4,8 @@ import React from "react"
 import { TabBarIcon } from "@/components/navigation/TabBarIcon"
 import { Colors } from "@/constants/Colors"
 import { useColorScheme } from "@/hooks/useColorScheme"
+import { Entypo, FontAwesome, FontAwesome6 } from "@expo/vector-icons"
+import Header from "../components/layout.tsx/header"
 
 export default function TabLayout() {
 	const colorScheme = useColorScheme()
@@ -12,7 +14,8 @@ export default function TabLayout() {
 		<Tabs
 			screenOptions={{
 				tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
-				headerShown: false,
+				header: () => <Header />,
+				tabBarStyle: { backgroundColor: Colors[colorScheme ?? "light"].background },
 			}}
 		>
 			<Tabs.Screen
@@ -20,10 +23,7 @@ export default function TabLayout() {
 				options={{
 					title: "Home",
 					tabBarIcon: ({ color, focused }) => (
-						<TabBarIcon
-							name={focused ? "home" : "home-outline"}
-							color={color}
-						/>
+					<FontAwesome6 name="house-chimney" size={24} color={color} />
 					),
 				}}
 			/>
@@ -33,7 +33,7 @@ export default function TabLayout() {
 					title: "Favourites",
 					tabBarIcon: ({ color, focused }) => (
 						<TabBarIcon
-							name={focused ? "code-slash" : "code-slash-outline"}
+							name={focused ? "heart" : "heart-outline"}
 							color={color}
 						/>
 					),
@@ -44,10 +44,7 @@ export default function TabLayout() {
 				options={{
 					title: "Messages",
 					tabBarIcon: ({ color, focused }) => (
-						<TabBarIcon
-							name={focused ? "code-slash" : "code-slash-outline"}
-							color={color}
-						/>
+						<Entypo name="message" size={24} color={color} />
 					),
 				}}
 			/>
@@ -56,10 +53,7 @@ export default function TabLayout() {
 				options={{
 					title: "Profile",
 					tabBarIcon: ({ color, focused }) => (
-						<TabBarIcon
-							name={focused ? "code-slash" : "code-slash-outline"}
-							color={color}
-						/>
+						<FontAwesome name="user-circle" size={24} color={color} />
 					),
 				}}
 			/>

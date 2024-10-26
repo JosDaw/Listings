@@ -41,12 +41,12 @@ const styles = StyleSheet.create({
 		marginVertical: 10,
 	},
 	yellowButton: {
-		backgroundColor: "#FFBD59",
+		backgroundColor: "#EBA743",
 		borderWidth: 2,
 		borderColor: "#000",
 	},
 	blueButton: {
-		backgroundColor: "#5271FF",
+		backgroundColor: "#BEDBBE",
 	},
 	buttonText: {
 		fontSize: 16,
