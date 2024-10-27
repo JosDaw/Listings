@@ -15,7 +15,9 @@ export default function TabLayout() {
 			screenOptions={{
 				tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
 				header: () => <Header />,
-				tabBarStyle: { backgroundColor: Colors[colorScheme ?? "light"].background },
+				tabBarStyle: {
+					backgroundColor: Colors[colorScheme ?? "light"].background,
+				},
 			}}
 		>
 			<Tabs.Screen
@@ -23,7 +25,7 @@ export default function TabLayout() {
 				options={{
 					title: "Home",
 					tabBarIcon: ({ color, focused }) => (
-					<FontAwesome6 name="house-chimney" size={24} color={color} />
+						<FontAwesome6 name="house-chimney" size={24} color={color} />
 					),
 				}}
 			/>
