@@ -1,7 +1,7 @@
 import { database } from "@/app/config/firebase"
 import useUser from "@/app/store/useUser"
 import { showToast } from "@/app/utils/common"
-import { router } from "expo-router"
+import { router, useRouter } from "expo-router"
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth"
 import { doc, DocumentData, getDoc } from "firebase/firestore"
 import { useState } from "react"
@@ -23,6 +23,7 @@ export default function Login() {
   const [isSaving, setIsSaving] = useState<boolean>(false);
 
   const { loginUser } = useUser();
+  const router = useRouter();
 
   /**
    * Handles the login process
@@ -74,7 +75,7 @@ export default function Login() {
 
           setIsSaving(false);
           showToast("Login successful.", "success")
-          router.push("/home")
+          router.push("/")
         } else {
           showToast("Failed to retrieve user data.", "error")
           return null

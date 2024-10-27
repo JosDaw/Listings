@@ -1,104 +1,94 @@
-import { collection, onSnapshot, query, where } from "firebase/firestore"
-import { useEffect, useState } from "react"
-import { database } from "../config/firebase"
-import useUser from "../store/useUser"
-import { IMessage } from "../types"
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { database } from "../config/firebase";
+import useUser from "../store/useUser";
+import { IMessage } from "../types";
 
 interface UseMessagesResult {
-  messages: IMessage[] | null
-  loading: boolean
-  error: string | null
+  messages: IMessage[];
+  loading: boolean;
+  error: string | null;
 }
 
-const useMessages = (): UseMessagesResult => {
-  const [messages, setMessages] = useState<IMessage[] | null>(null)
-  const [loading, setLoading] = useState<boolean>(true)
-  const [error, setError] = useState<string | null>(null)
-  const { user } = useUser()
+const useMessage = (recipientID: string): UseMessagesResult => {
+  const [messages, setMessages] = useState<IMessage[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const { user } = useUser();
 
   useEffect(() => {
-    if (!user || !user.userID) {
-      setLoading(false)
-      return
-    }
+    if (!user || !user.userID) return;
 
-    setLoading(true)
-    setError(null)
+    const fetchMessages = async () => {
+      setLoading(true);
+      setError(null);
 
-    // Query for messages where the user is the recipient
-    const messagesRef = collection(database, "message")
-    const recipientQuery = query(messagesRef, where("recipientID", "==", user.userID))
-    console.log("🚀 ~ useEffect ~ user.userID:", user.userID)
-    const senderQuery = query(messagesRef, where("senderID", "==", user.userID))
+      try {
+        const messagesRef = collection(database, "message");
 
-    const unsubscribeRecipient = onSnapshot(
-      recipientQuery,
-      (snapshot) => {
-        const recipientMessages = snapshot.docs.map((doc) => formatMessage(doc))
-        handleCombinedMessages(recipientMessages)
-      },
-      (error) => handleSnapshotError(error)
-    )
+        let sentMessages: IMessage[] = [];
+        let receivedMessages: IMessage[] = [];
 
-    const unsubscribeSender = onSnapshot(
-      senderQuery,
-      (snapshot) => {
-        const senderMessages = snapshot.docs.map((doc) => formatMessage(doc))
-        handleCombinedMessages(senderMessages)
-      },
-      (error) => handleSnapshotError(error)
-    )
+        // Query for messages sent by the user
+        try {
+          const sentMessagesQuery = query(
+            messagesRef,
+            where("senderID", "==", user.userID),
+            where("recipientID", "==", recipientID)
+          );
 
-    return () => {
-      unsubscribeRecipient()
-      unsubscribeSender()
-    }
-  }, [user])
+          const sentMessagesSnapshot = await getDocs(sentMessagesQuery);
 
-  // Format message from Firestore doc
-  const formatMessage = (doc: any): IMessage => {
-    const data = doc.data()
-    return {
-      id: doc.id,
-      senderID: data.userID,
-      senderName: data.senderName || "Anonymous",
-      recipientID: data.recipientID,
-      recipientName: data.recipientName || "Anonymous",
-      text: data.text,
-      dateCreated: data.dateCreated,
-    }
-  }
+          sentMessages = sentMessagesSnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          })) as IMessage[];
 
-  // Function to handle combining and filtering messages
-  const handleCombinedMessages = (newMessages: IMessage[]) => {
-    setMessages((prevMessages) => {
-      const combinedMessages = [...(prevMessages || []), ...newMessages]
-      return getUniqueMessagesByOtherParty(combinedMessages)
-    })
-    setLoading(false)
-  }
+        } catch (error) {
+          console.error("Error executing sent messages query:", error);
+        }
 
-  // Handle snapshot error
-  const handleSnapshotError = (error: any) => {
-    console.error("Error fetching messages:", error)
-    setError("Failed to fetch messages.")
-    setLoading(false)
-  }
+        // Query for messages received by the user
+        try {
+          const receivedMessagesQuery = query(
+            messagesRef,
+            where("senderID", "==", recipientID),
+            where("recipientID", "==", user.userID)
+          );
 
-  // Filter unique messages by the other party (either sender or recipient)
-  const getUniqueMessagesByOtherParty = (messages: IMessage[]) => {
-    const uniqueMessages: { [key: string]: IMessage } = {}
-    messages.forEach((message) => {
-      const otherPartyID = message.senderID === user.userID ? message.recipientID : message.senderID
-      // Only add the first message per unique other party
-      if (!uniqueMessages[otherPartyID]) {
-        uniqueMessages[otherPartyID] = message
+          const receivedMessagesSnapshot = await getDocs(receivedMessagesQuery);
+
+          receivedMessages = receivedMessagesSnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          })) as IMessage[];
+
+        } catch (error) {
+          console.error("Error executing received messages query:", error);
+        }
+
+        // Combine and sort by dateCreated in ascending order
+        const allMessages = [...sentMessages, ...receivedMessages];
+
+        const sortedMessages = allMessages.sort((a, b) => {
+          const dateA = (a.dateCreated as any).toMillis ? (a.dateCreated as any).toMillis() : 0;
+          const dateB = (b.dateCreated as any).toMillis ? (b.dateCreated as any).toMillis() : 0;
+          return  dateB - dateA;
+        });
+
+        setMessages(sortedMessages);
+      } catch (error) {
+        console.error("Error fetching messages:", error);
+        setError("Failed to fetch messages.");
+      } finally {
+        setLoading(false);
       }
-    })
-    return Object.values(uniqueMessages)
-  }
+    };
 
-  return { messages, loading, error }
-}
+    fetchMessages();
+  }, [user, recipientID]);
 
-export default useMessages
+  return { messages, loading, error };
+};
+
+export default useMessage;

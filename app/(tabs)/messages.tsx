@@ -2,11 +2,10 @@ import React from "react"
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from "react-native"
 import LoadingAnimationScreen from "../components/common/loading-spinner"
 import MessageCard from "../components/messages/message-card"
-import useMessages from "../hooks/useMessage"
+import useMessages from "../hooks/useMessages"
 
 export default function MessagesScreen() {
   const { messages, loading, error } = useMessages()
-  console.log("🚀 ~ MessagesScreen ~ messages:", messages)
 
 	if(loading){
 		return <LoadingAnimationScreen />
@@ -14,7 +13,6 @@ export default function MessagesScreen() {
 
   return (
     <View style={styles.container}>
-      {loading && <ActivityIndicator size="large" color="#0000ff" />}
       {error && <Text style={styles.errorText}>{error}</Text>}
       <FlatList
         data={messages}

@@ -54,8 +54,9 @@ const LoadingText = () => {
     <View style={{
       flexDirection: 'row',
       marginTop: 12,
+
     }}>
-      <Text style={{fontFamily: ''}}>Loading</Text>
+      <Text style={{ fontFamily: 'Exo2_400Regular'}}>Loading</Text>
       <Text>{dots + spaces}</Text>
     </View>
   );
