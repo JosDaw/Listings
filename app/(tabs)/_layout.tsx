@@ -23,9 +23,15 @@ export default function TabLayout() {
 			<Tabs.Screen
 				name="index"
 				options={{
+					tabBarShowLabel: false,
 					title: "Home",
+					tabBarActiveTintColor: "#EBA743",
 					tabBarIcon: ({ color, focused }) => (
-						<FontAwesome6 name="house-chimney" size={24} color={color} />
+						<FontAwesome6
+							name="house-chimney"
+							size={24}
+							color={focused ? "#EBA743" : color}
+						/>
 					),
 				}}
 			/>
@@ -33,11 +39,10 @@ export default function TabLayout() {
 				name="favourites"
 				options={{
 					title: "Favourites",
+					tabBarShowLabel: false,
+					tabBarActiveTintColor: "#EBA743",
 					tabBarIcon: ({ color, focused }) => (
-						<TabBarIcon
-							name={focused ? "heart" : "heart-outline"}
-							color={color}
-						/>
+						<TabBarIcon name={"heart"} color={focused ? "#EBA743" : color} />
 					),
 				}}
 			/>
@@ -45,8 +50,14 @@ export default function TabLayout() {
 				name="messages"
 				options={{
 					title: "Messages",
+					tabBarShowLabel: false,
+					tabBarActiveTintColor: "#EBA743",
 					tabBarIcon: ({ color, focused }) => (
-						<Entypo name="message" size={24} color={color} />
+						<Entypo
+							name="message"
+							size={24}
+							color={focused ? "#EBA743" : color}
+						/>
 					),
 				}}
 			/>
@@ -54,8 +65,14 @@ export default function TabLayout() {
 				name="profile"
 				options={{
 					title: "Profile",
+					tabBarShowLabel: false,
+					tabBarActiveTintColor: "#EBA743",
 					tabBarIcon: ({ color, focused }) => (
-						<FontAwesome name="user-circle" size={24} color={color} />
+						<FontAwesome
+							name="user-circle"
+							size={24}
+							ccolor={focused ? "#EBA743" : color}
+						/>
 					),
 				}}
 			/>
