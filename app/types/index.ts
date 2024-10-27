@@ -1,5 +1,12 @@
 import { Timestamp } from "firebase/firestore"
 
+export interface IProfile {
+	id: string;
+	name: string;
+	email: string;
+	profilePictureUrl: string;
+}
+
 export interface IUser {
 	email: string
 	userID: string
