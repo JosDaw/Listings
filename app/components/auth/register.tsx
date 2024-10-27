@@ -21,56 +21,63 @@ export default function Register() {
 	})
 	const [isChecked, setChecked] = useState<boolean>(false)
 	const [isSaving, setIsSaving] = useState<boolean>(false)
-	const { loginUser } = useUser();
+	const { loginUser } = useUser()
 
 	const handleInputChange = (field: keyof IRegister, value: string) => {
 		setRegisterData({ ...registerData, [field]: value })
 	}
 
 	/**
- * Handle sign up
- * @returns
- */
+	 * Handle sign up
+	 * @returns
+	 */
 	const handleSignup = async () => {
 		if (!isChecked) {
-			showToast('Please read and accept the terms and conditions.', 'error');
-			return;
+			showToast("Please read and accept the terms and conditions.", "error")
+			return
 		}
 
 		if (
-			registerData.email === '' ||
-			registerData.password === '' ||
-			registerData.confirmPassword === ''
+			registerData.email === "" ||
+			registerData.password === "" ||
+			registerData.confirmPassword === ""
 		) {
-			return showToast('Please fill in all the fields.', 'error');
+			return showToast("Please fill in all the fields.", "error")
 		}
 
 		// Basic validation
-		const passwordRegex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d\S]{6,}$/;
+		const passwordRegex = /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d\S]{6,}$/
 
 		if (!passwordRegex.test(registerData.password)) {
-			showToast('Password must be at least 6 characters long and contain at least one uppercase letter and one number.', 'error');
-			setIsSaving(false);
-			return;
+			showToast(
+				"Password must be at least 6 characters long and contain at least one uppercase letter and one number.",
+				"error"
+			)
+			setIsSaving(false)
+			return
 		}
 
-		const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+		const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 
 		if (!emailRegex.test(registerData.email)) {
-			showToast('Please enter a valid email address.', 'error');
-			return;
+			showToast("Please enter a valid email address.", "error")
+			return
 		}
 
 		if (registerData.password !== registerData.confirmPassword) {
-			showToast('Passwords do not match.', 'error');
-			setIsSaving(false);
-			return;
+			showToast("Passwords do not match.", "error")
+			setIsSaving(false)
+			return
 		}
 
-		const auth = getAuth();
+		const auth = getAuth()
 
 		// Register with Firebase auth
-		await createUserWithEmailAndPassword(auth, registerData.email, registerData.password)
+		await createUserWithEmailAndPassword(
+			auth,
+			registerData.email,
+			registerData.password
+		)
 			.then(async (userCredential: { user: { uid: string } }) => {
 				// Save user to Firebase
 				try {
@@ -86,25 +93,33 @@ export default function Register() {
 						loginUser({
 							email: registerData.email,
 							isRealtor: false,
-							expoPushToken: '',
+							expoPushToken: "",
 							allowPushNotifications: true,
 							userID: userCredential.user.uid,
 							name: registerData.name,
-						});
+						})
 
 						// Navigate to home
-						router.push('/');
-					});
+						router.push("/")
+					})
 				} catch (error: any) {
-					showToast('An error occurred. Please try again. Error: ' + JSON.stringify(error), 'error');
-					setIsSaving(false);
+					showToast(
+						"An error occurred. Please try again. Error: " +
+							JSON.stringify(error),
+						"error"
+					)
+					setIsSaving(false)
 				}
 			})
 			.catch((error: any) => {
-				showToast('An error occurred. Please try again. Error: ' + JSON.stringify(error), 'error');
-				setIsSaving(false);
-			});
-	};
+				showToast(
+					"An error occurred. Please try again. Error: " +
+						JSON.stringify(error),
+					"error"
+				)
+				setIsSaving(false)
+			})
+	}
 
 	return (
 		<View style={styles.container}>
@@ -136,11 +151,7 @@ export default function Register() {
 				label={<Link href="/terms">Terms and Conditions</Link>}
 			/>
 
-			<RoundedButton
-				title="Sign Up"
-				color="yellow"
-				onPress={handleSignup}
-			/>
+			<RoundedButton title="Sign Up" color="yellow" onPress={handleSignup} />
 		</View>
 	)
 }
@@ -156,12 +167,12 @@ const styles = StyleSheet.create({
 		fontSize: 24,
 		marginBottom: 24,
 		fontFamily: "Exo2_400Regular",
-		color: '#15392F'
+		color: "#15392F",
 	},
 	subtitle: {
 		fontSize: 16,
 		marginBottom: 8,
 		fontFamily: "Exo2_400Regular",
-		color: '#15392F'
-	}
+		color: "#15392F",
+	},
 })

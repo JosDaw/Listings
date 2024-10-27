@@ -13,7 +13,7 @@ import { StatusBar } from "expo-status-bar"
 import { useCallback, useEffect, useState } from "react"
 import { TouchableOpacity, View } from "react-native"
 import "react-native-reanimated"
-import { RootSiblingParent } from 'react-native-root-siblings'
+import { RootSiblingParent } from "react-native-root-siblings"
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
 import AuthScreen from "./auth"
 import useUser from "./store/useUser"
@@ -25,7 +25,6 @@ export default function RootLayout() {
 	const colorScheme = useColorScheme()
 	const [fontsLoaded, setFontsLoaded] = useState(false)
 	const { isLoggedIn } = useUser()
-
 
 	const loadResourcesAsync = async () => {
 		try {
@@ -62,12 +61,14 @@ export default function RootLayout() {
 	return (
 		<RootSiblingParent>
 			<SafeAreaProvider>
-				<ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+				<ThemeProvider
+					value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+				>
 					<View onLayout={onLayoutRootView} style={{ flex: 1 }}>
 						<SafeAreaView
 							style={{
 								flex: 1,
-								backgroundColor: '#B9D9C3'
+								backgroundColor: "#B9D9C3",
 							}}
 							edges={["right", "top", "left"]}
 						>
@@ -79,9 +80,14 @@ export default function RootLayout() {
 								<Stack.Screen
 									name="message/[slug]"
 									options={{
-										header: () => <TouchableOpacity onPress={() => router.push('/messages')} style={{ padding: 8 }}>
-											<Ionicons name="arrow-back" size={30} color="#15392F" />
-										</TouchableOpacity>
+										header: () => (
+											<TouchableOpacity
+												onPress={() => router.push("/messages")}
+												style={{ padding: 8 }}
+											>
+												<Ionicons name="arrow-back" size={30} color="#15392F" />
+											</TouchableOpacity>
+										),
 									}}
 								/>
 							</Stack>
